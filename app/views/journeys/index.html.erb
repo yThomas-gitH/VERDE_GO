@@ -1,0 +1,10 @@
+<h1>New Journey</h1>
+
+<h1>My Journeys</h1>
+<% @journeys.each do |journey| %>
+  <p>
+    <%= journey.origin_address %> → <%= journey.destination_address %>
+    |
+    <%= link_to "View Routes", journey_routes_path(journey) %>
+  </p>
+<% end %>
