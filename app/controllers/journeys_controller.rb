@@ -49,7 +49,7 @@ class JourneysController < ApplicationController
             render json: { 
               journey: @journey.as_json(methods: [:distance_km]),
               message: 'Journey created successfully. Routes are being calculated.',
-              redirect_url: journey_path(@journey)
+              redirect_url: journey_routes_path(@journey)
             }, status: :created 
           }
         end
