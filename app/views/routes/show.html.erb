@@ -1,0 +1,17 @@
+<h3>Routes</h3>
+<p>
+  journey: <%= @route.journey %>,
+  transport_mode: <%= @route.transport_mode %>,
+  total_duration_minutes: <%= @route.total_duration_minutes %>,
+  total_distance_km: <%= @route.total_distance_km %>,
+  eco_score: <%= @route.eco_score %>,
+  map_polyline: <%= @route.map_polyline %>
+</p>
+<h3>Carbon Info</h3>
+<p>
+  route: <%= @carbon_calculation.route %>,
+  total_emissions_kg: <%= @carbon_calculation.total_emissions_kg %>,
+  carbon_saved_kg: <%= @carbon_calculation.carbon_saved_kg %>,
+  calculation_method: <%= @carbon_calculation.calculation_method %>,
+  breakdown: <%= @carbon_calculation.breakdown %>
+</p>

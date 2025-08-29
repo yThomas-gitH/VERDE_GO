@@ -13,8 +13,16 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root to: "pages#home"
 
-  resources :journeys, except: [:edit, :update, :destroy]
+  resources :journeys, except: [:show, :edit, :update, :destroy]
   resources :journeys do
-    resources :routes, except: [:edit, :update, :destroy]
+    member do
+      get :route_status # AJAX endpoint for checking route calculation progress
+    end
+
+    resources :routes, only: [:index, :show] do
+      collection do
+        post :recalculate # Manual recalculation
+      end
+    end
   end
 end

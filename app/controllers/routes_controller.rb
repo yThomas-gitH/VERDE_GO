@@ -24,17 +24,27 @@ class RoutesController < ApplicationController
   end
   
   def show
+    @journey = current_user.journeys.find(params[:journey_id])
     @route = current_user.routes.find(params[:id])
     @carbon_calculation = @route.carbon_calculation
     @transport_mode = @route.transport_mode
+
+    respond_to do |format|
+      format.html
+      format.json { 
+        render json: @route.as_json(
+          include: [:carbon_calculation, :transport_mode],
+          methods: [:carbon_per_km]
+        )
+      }
+    end
   end
   
-  def create
+  def recalculate
     @journey = current_user.journeys.find(params[:journey_id])
-    
-    # This would typically be called by RouteFinderService
-    routes = RouteFinderService.new(@journey).find_all_routes
-    
-    render json: { routes: routes, journey: @journey }
+    @journey.routes.destroy_all
+    RouteCalculationJob.perform_later(@journey.id)
+
+    render json: { message: 'Route recalculation started' }
   end
 end

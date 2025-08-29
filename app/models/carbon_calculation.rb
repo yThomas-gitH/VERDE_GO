@@ -12,4 +12,5 @@ class CarbonCalculation < ApplicationRecord
     # Average tree absorbs ~25 kg CO2 per year
     # https://ecotree.green/combien-de-co2-absorbe-un-arbre#:~:text=est%20plus%20importante.-,Un%20arbre%20absorbe%20environ%2025%20kg%20de%20CO2%20par,par%20arbre%20et%20par%20an.
     (total_emissions_kg / 25).ceil #rounded at upper integer
+  end
 end

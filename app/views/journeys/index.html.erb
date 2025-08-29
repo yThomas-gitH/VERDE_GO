@@ -1,5 +1,10 @@
 <h1>New Journey</h1>
-
+ <h4>Add new movie</h4>
+  <%= simple_form_for [@journey] do |f| %>
+    <%= f.input :origin_address %>
+    <%= f.input :destination_address %>
+    <%= f.submit %>
+  <% end %>
 <h1>My Journeys</h1>
 <% @journeys.each do |journey| %>
   <p>

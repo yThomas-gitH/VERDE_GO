@@ -51,6 +51,10 @@ gem "sassc-rails"
 gem 'httparty'
 gem 'geocoder'
 
+# Background jobs (for API calls)
+gem 'sidekiq'
+gem 'redis'
+
 group :development, :test do
   gem "dotenv-rails"
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

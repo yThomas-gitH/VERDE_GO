@@ -303,6 +303,10 @@ GEM
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
+    redis (5.4.1)
+      redis-client (>= 0.22.0)
+    redis-client (0.25.2)
+      connection_pool
     regexp_parser (2.11.2)
     reline (0.6.2)
       io-console (~> 0.5)
@@ -355,6 +359,12 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
+    sidekiq (8.0.7)
+      connection_pool (>= 2.5.0)
+      json (>= 2.9.0)
+      logger (>= 1.6.2)
+      rack (>= 3.1.0)
+      redis-client (>= 0.23.2)
     solid_cable (3.0.12)
       actioncable (>= 7.2)
       activejob (>= 7.2)
@@ -454,9 +464,11 @@ DEPENDENCIES
   propshaft
   puma (>= 5.0)
   rails (~> 8.0.2, >= 8.0.2.1)
+  redis
   rubocop-rails-omakase
   sassc-rails
   selenium-webdriver
+  sidekiq
   simple_form!
   solid_cable
   solid_cache
