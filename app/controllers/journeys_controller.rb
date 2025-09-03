@@ -53,6 +53,9 @@ class JourneysController < ApplicationController
             }, status: :created 
           }
         end
+
+        RouteCalculationJob.perform_later(@journey.id)
+
       else
         respond_to do |format|
           format.html { 
