@@ -2,7 +2,7 @@
 <% @routes.each do |route| %>
   <p>
     journey: <%= route.journey %>,
-    transport_mode: <%= route.transport_mode %>,
+    transport_mode: <%= route.transport_mode.name %>,
     total_duration_minutes: <%= route.total_duration_minutes %>,
     total_distance_km: <%= route.total_distance_km %>,
     eco_score: <%= route.eco_score %>,

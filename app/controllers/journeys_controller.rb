@@ -3,7 +3,7 @@ class JourneysController < ApplicationController
   before_action :set_journey, only: [:destroy]
   
   def index
-    @journeys = current_user.journeys.recent.includes(routes: [:carbon_calculation, :transport_mode])
+    @journeys = current_user.journeys.recent.includes(routes: [:carbon_calculation, :transport_mode]) || []
     @journey = Journey.new(user: current_user) # For the new journey form on index page
     
     respond_to do |format|
