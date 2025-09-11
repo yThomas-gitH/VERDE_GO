@@ -26,7 +26,7 @@ class CarbonCalculatorService
   def calculate_with_climatiq
     
     # Appel de l'API Climatiq pour des calculs précis
-    api_response = @carbon_api.calculate_transport_emissions(@route.transport_mode, @route.total_distance_km)
+    api_response = @carbon_api.calculate_transport_emissions(transport_method: @route.transport_mode, distance_km: @route.total_distance_km.to_i)
     # @route.total_distance_km
     
     emissions = api_response[:carbon_kg]

@@ -10,7 +10,7 @@ class ClimatiqService
     }
   end
 
-  def calculate_transport_emissions(transport_method, distance_km)
+  def calculate_transport_emissions(transport_method:, distance_km:)
     factor = get_emission_factor(transport_method)
 
     # Cas spécial zéro émission
