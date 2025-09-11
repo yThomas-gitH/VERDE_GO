@@ -17,6 +17,7 @@ class RouteFinderService
     # routes.compact.each do |route|
     #   CarbonCalculationJob.perform_later(route.id)
     # end
+    CarbonCalculationJob.perform_later(routes[2].id)
 
     routes.compact
   end
