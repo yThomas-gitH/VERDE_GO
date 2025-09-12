@@ -26,7 +26,7 @@ bus = TransportMode.create!(name: "Bus", icon_name: "bus", carbon_factor_kg_per_
 train = TransportMode.create!(name: "Train", icon_name: "train", carbon_factor_kg_per_km: 0.041, color_hex: "#33FF77")
 bike = TransportMode.create!(name: "Bicycle", icon_name: "bicycle", carbon_factor_kg_per_km: 0.0, color_hex: "#FFD700")
 walk = TransportMode.create!(name: "Walking", icon_name: "walking", carbon_factor_kg_per_km: 0.0, color_hex: "#A9A9A9")
-plane = TransportMode.create!(name: "Flying", icon_name: "flying", carbon_factor_kg_per_km: 0.0, color_hex: "#A9A9A9")
+plane = TransportMode.create!(name: "Flight", icon_name: "flying", carbon_factor_kg_per_km: 0.0, color_hex: "#A9A9A9")
 
 puts "Creating journeys..."
 journey1 = Journey.create!(

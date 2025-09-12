@@ -11,8 +11,9 @@ class CarbonCalculatorService
       car_baseline = climatiq_calculation[:baseline_car_emissions]
       save_calculation(climatiq_calculation)
     rescue StandardError => e
-      Rails.logger.warn "Calcul Climatiq échoué: #{e.message}"
-      nil
+      Rails.logger.warn "Calcul Climatiq échoué: #{e.message}, utilisation des facteurs locaux"
+      local_calculation = calculate_locally
+      save_calculation(local_calculation)
     end
     
     # Mise à jour du score écologique
@@ -39,7 +40,7 @@ class CarbonCalculatorService
                        distance_km: @route.total_distance_km
                      )[:carbon_kg]
                    else
-                     @route.total_distance_km * 0.17141 # Fallback
+                     @route.total_distance_km * TransportMode::DEFAULT_FACTORS['Car'] # Fallback
                    end
     
     {
@@ -47,10 +48,33 @@ class CarbonCalculatorService
       carbon_saved: [car_baseline - emissions, 0].max,
       baseline_car_emissions: car_baseline,
       climatiq_activity_id: api_response[:activity_id],
-      emission_factor_source: api_response[:source],
+      emission_factor_source: 'Climatiq API',
       emission_factor_year: api_response[:year],
       uncertainty_percentage: api_response[:uncertainty_percentage],
       api_response: api_response[:api_response]
+    }
+  end
+
+  def calculate_locally
+    emissions = @route.total_distance_km * TransportMode::DEFAULT_FACTORS[@route.transport_mode.name]
+    
+    # Calcul du baseline voiture pour comparaison
+    car_mode = TransportMode.find_by(name: 'car')
+    car_baseline = if car_mode
+                     @climatiq.calculate_transport_emissions(
+                       transport_mode: car_mode,
+                       distance_km: @route.total_distance_km
+                     )[:carbon_kg]
+                   else
+                     @route.total_distance_km * TransportMode::DEFAULT_FACTORS['Car'] # Fallback
+                   end
+    
+    {
+      total_emissions: emissions,
+      carbon_saved: [car_baseline - emissions, 0].max,
+      baseline_car_emissions: car_baseline,
+      emission_factor_source: 'Local Database',
+      uncertainty_percentage: 20.0
     }
   end
 
@@ -59,7 +83,7 @@ class CarbonCalculatorService
       route: @route,
       total_emissions_kg: carbon_data[:total_emissions],
       carbon_saved_kg: carbon_data[:carbon_saved],
-      calculation_method: 'distance_based'
+      calculation_method: carbon_data[:emission_factor_source]
     )
   end
   

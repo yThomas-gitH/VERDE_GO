@@ -52,7 +52,7 @@ class ClimatiqService
     mapping = {
       'Car' => 'passenger_vehicle-vehicle_type_car-fuel_source_na-engine_size_na-vehicle_age_na-vehicle_weight_na',
       'Bus' => 'passenger_vehicle-vehicle_type_bus-fuel_source_na-engine_size_na-vehicle_age_na-vehicle_weight_na',
-      'Train' => 'passenger_vehicle-vehicle_type_train-fuel_source_na-engine_size_na-vehicle_age_na-vehicle_weight_na',
+      'Train' => nil,
       'Flight'  => 'passenger_flight-route_type_na-aircraft_type_na-distance_short_medium_haul_lt_1000km-class_na-rf_included-distance_uplift_na',
       'Bicycle' => nil,
       'Walking' => nil

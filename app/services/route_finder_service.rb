@@ -17,10 +17,9 @@ class RouteFinderService
     routes << find_train_route
     routes << find_flying_route
 
-    # routes.compact.each do |route|
-    #   CarbonCalculationJob.perform_later(route.id)
-    # end
-    CarbonCalculationJob.perform_later(routes[2].id)
+    routes.compact.each do |route|
+      CarbonCalculationJob.perform_later(route.id)
+    end
 
     routes.compact
   end
@@ -140,7 +139,7 @@ class RouteFinderService
 
   def find_flying_route
 
-    flying_mode = TransportMode.find_by(name: 'Flying')
+    flying_mode = TransportMode.find_by(name: 'Flight')
 
     # Average commercial plane speed set to 900km/h
     avg_plane_speed = 900.0
@@ -160,7 +159,7 @@ class RouteFinderService
     Rails.logger.error "Failed to create plane route: #{e.message}"
     nil
   end
-  
+
 end
 
 

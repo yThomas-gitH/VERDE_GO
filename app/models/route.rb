@@ -15,7 +15,4 @@ class Route < ApplicationRecord
     carbon_calculation&.total_emissions_kg&./(total_distance_km) || 0
   end
 
-  def carbon_emissions_kg
-    total_distance_km * transport_mode.carbon_factor_kg_per_km #pas certain vu qu'utilisation d'API
-  end
 end
