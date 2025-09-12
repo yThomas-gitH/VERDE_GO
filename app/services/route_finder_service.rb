@@ -11,8 +11,11 @@ class RouteFinderService
 
     routes << find_walking_route
     routes << find_cycling_route
-    routes << find_driving_route
-    # routes << find_flying_route
+    driving_route = find_driving_route
+    routes << driving_route
+    routes << find_bus_route(driving_route)
+    routes << find_train_route
+    routes << find_flying_route
 
     # routes.compact.each do |route|
     #   CarbonCalculationJob.perform_later(route.id)
@@ -89,27 +92,75 @@ class RouteFinderService
       eco_score: 3
     )
   rescue ActiveRecord::RecordInvalid => e
-    Rails.logger.error "Failed to create walking route: #{e.message}"
+    Rails.logger.error "Failed to create driving route: #{e.message}"
     nil
   end
 
-  # def find_flying_route
+  def find_bus_route(car_data)
+    directions_data = car_data
 
-  #   flying_mode = TransportMode.find_by(name: 'Flying')
+    return nil unless directions_data
 
-  #   @journey.routes.create!(
-  #     transport_mode: walking_mode,
-  #     total_duration_minutes: 2,
-  #     total_distance_km: 4,
-  #     eco_score: 0,
-  #     total_duration_minutes: directions_data[:duration_minutes],
-  #     total_distance_km: directions_data[:distance_km],
-  #     map_polyline: directions_data[:polyline]
-  #   )
-  # rescue ActiveRecord::RecordInvalid => e
-  #   Rails.logger.error "Failed to create walking route: #{e.message}"
-  #   nil
-  # end
+    bus_mode = TransportMode.find_by(name: 'Bus')
+
+    @journey.routes.create!(
+      transport_mode: bus_mode,
+      total_duration_minutes: directions_data[:total_duration_minutes],
+      total_distance_km: directions_data[:total_distance_km],
+      map_polyline: directions_data[:map_polyline],
+      eco_score: 6
+    )
+  rescue ActiveRecord::RecordInvalid => e
+    Rails.logger.error "Failed to create bus route: #{e.message}"
+    nil
+  end
+
+  def find_train_route
+
+    train_mode = TransportMode.find_by(name: 'Train')
+
+    # Average train speed set to 70km/h
+    avg_train_speed = 70.0
+    bird_distance = @journey.distance_km
+    train_duration = 60 / avg_train_speed * bird_distance
+
+    return nil unless bird_distance
+
+    @journey.routes.create!(
+      transport_mode: train_mode,
+      total_duration_minutes: train_duration,
+      total_distance_km: @journey.distance_km,
+      map_polyline: "//",
+      eco_score: 8
+    )
+  rescue ActiveRecord::RecordInvalid => e
+    Rails.logger.error "Failed to create train route: #{e.message}"
+    nil
+  end
+
+  def find_flying_route
+
+    flying_mode = TransportMode.find_by(name: 'Flying')
+
+    # Average commercial plane speed set to 900km/h
+    avg_plane_speed = 900.0
+    bird_distance = @journey.distance_km
+    flight_duration = 60 / avg_plane_speed * bird_distance
+
+    return nil unless bird_distance
+
+    @journey.routes.create!(
+      transport_mode: flying_mode,
+      total_duration_minutes: flight_duration,
+      total_distance_km: @journey.distance_km,
+      map_polyline: "//",
+      eco_score: 0
+    )
+  rescue ActiveRecord::RecordInvalid => e
+    Rails.logger.error "Failed to create plane route: #{e.message}"
+    nil
+  end
+  
 end
 
 

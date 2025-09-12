@@ -15,10 +15,7 @@ class Journey < ApplicationRecord
   # after_create :calculate_routes
 
   def distance_km
-    Geocoder::Calculations.distance_between(
-      [origin_lat, origin_lng], 
-      [destination_lat, destination_lng]
-    )
+    Geocoder::Calculations.distance_between( [origin_lat, origin_lng], [destination_lat, destination_lng] ) / 0.621371 # Conversion from miles to km
   end
 
   def best_eco_route

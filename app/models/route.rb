@@ -4,7 +4,7 @@ class Route < ApplicationRecord
   has_one :carbon_calculation, dependent: :destroy
 
   validates :total_duration_minutes, :total_distance_km, presence: true
-  validates :eco_score, presence: true, inclusion: { in: 1..10 }
+  validates :eco_score, presence: true, inclusion: { in: 0..10 }
 
   scope :by_eco_score, -> { order(eco_score: :desc) }
   scope :by_duration, -> { order(:total_duration_minutes) }
