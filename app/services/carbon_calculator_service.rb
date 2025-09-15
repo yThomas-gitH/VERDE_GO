@@ -7,9 +7,14 @@ class CarbonCalculatorService
   def calculate!
     car_baseline = 0
     begin
-      climatiq_calculation = calculate_with_climatiq
-      car_baseline = climatiq_calculation[:baseline_car_emissions]
-      save_calculation(climatiq_calculation)
+      if ['Car', 'Flight', 'Bus'].include?(@route.transport_mode.name)
+        climatiq_calculation = calculate_with_climatiq
+        car_baseline = climatiq_calculation[:baseline_car_emissions]
+        save_calculation(climatiq_calculation)
+      else
+        local_calculation = calculate_locally
+        save_calculation(local_calculation)
+      end
     rescue StandardError => e
       Rails.logger.warn "Calcul Climatiq échoué: #{e.message}, utilisation des facteurs locaux"
       local_calculation = calculate_locally
@@ -35,9 +40,9 @@ class CarbonCalculatorService
     # Calcul du baseline voiture pour comparaison
     car_mode = TransportMode.find_by(name: 'car')
     car_baseline = if car_mode
-                     @climatiq.calculate_transport_emissions(
-                       transport_mode: car_mode,
-                       distance_km: @route.total_distance_km
+                     @carbon_api.calculate_transport_emissions(
+                       transport_method: car_mode,
+                       distance_km: @route.total_distance_km.to_i
                      )[:carbon_kg]
                    else
                      @route.total_distance_km * TransportMode::DEFAULT_FACTORS['Car'] # Fallback
@@ -59,11 +64,11 @@ class CarbonCalculatorService
     emissions = @route.total_distance_km * TransportMode::DEFAULT_FACTORS[@route.transport_mode.name]
     
     # Calcul du baseline voiture pour comparaison
-    car_mode = TransportMode.find_by(name: 'car')
+    car_mode = TransportMode.find_by(name: 'Car')
     car_baseline = if car_mode
-                     @climatiq.calculate_transport_emissions(
-                       transport_mode: car_mode,
-                       distance_km: @route.total_distance_km
+                     @carbon_api.calculate_transport_emissions(
+                       transport_method: car_mode,
+                       distance_km: @route.total_distance_km.to_i
                      )[:carbon_kg]
                    else
                      @route.total_distance_km * TransportMode::DEFAULT_FACTORS['Car'] # Fallback

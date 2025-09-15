@@ -198,5 +198,5 @@ class JourneysController < ApplicationController
         distance_km: distance
       }
     end
-    end
+  end
 end

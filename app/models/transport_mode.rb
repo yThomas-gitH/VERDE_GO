@@ -9,7 +9,7 @@ class TransportMode < ApplicationRecord
 
   DEFAULT_FACTORS = {
     'Walking' => 0.0,
-    'Cycling' => 0.0,
+    'Bicycle' => 0.0,
     'Bus' => 0.08891,     # kg CO2e par km par passager
     'Train' => 0.04115,   # kg CO2e par km par passager  
     'Car' => 0.17141,     # kg CO2e par km (voiture moyenne)
