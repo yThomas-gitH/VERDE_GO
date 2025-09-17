@@ -1,10 +1,16 @@
 <h1>New Journey</h1>
  <h4>Add new movie</h4>
-  <%= simple_form_for [@journey] do |f| %>
-    <%= f.input :origin_address %>
-    <%= f.input :destination_address %>
-    <%= f.submit %>
-  <% end %>
+  <%= simple_form_for @journey do |f| %>
+        <%= f.input :origin_address,
+          label: 'From',
+          input_html: { data: { address_autocomplete_target: "address" } } %>
+
+        <%= f.input :destination_address,
+          label: 'To',
+          input_html: { data: { address_autocomplete_target: "address" } } %>
+
+        <%= f.submit %>
+      <% end %>
 <h1>My Journeys</h1>
 <% @journeys.each do |journey| %>
   <p>
@@ -13,3 +19,35 @@
     <%= link_to "View Routes", journey_routes_path(journey) %>
   </p>
 <% end %>
+
+<div class="flex-row">
+
+  <div>
+    <h1>Ready to start a new Journey?</h1>
+    <div data-controller="address-autocomplete"
+        data-address-autocomplete-api-key-value="<%= ENV['MAPBOX_ACCESS_TOKEN'] %>">
+      <h4>Plan your trip</h4>
+
+      <%= simple_form_for [@journey] do |f| %>
+        <%= f.input :origin_address, label: 'From',
+        input_html: {data: {address_autocomplete_target: "address"}},
+        wrapper_html: {data: {controller: "address-autocomplete", address_autocomplete_api_key_value: ENV["MAPBOX_ACCESS_TOKEN"]}} %>
+        <%= f.input :destination_address, label: 'To'%>
+        <%= f.submit %>
+      <% end %>
+
+    </div>
+    <h1>Past journeys</h1>
+    <% @journeys.each do |journey| %>
+      <p>
+        <%= journey.origin_address %> → <%= journey.destination_address %>
+        |
+        <%= link_to "View Routes", journey_routes_path(journey) %>
+      </p>
+    <% end %>
+  </div>
+
+  <div>
+   <%= image_tag "verdego_logo.png", alt: "VerdeGo Logo" %>
+  </div>
+</div>

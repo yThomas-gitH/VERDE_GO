@@ -19,11 +19,28 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <!-- Mapbox GL CSS -->
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css"
+      rel="stylesheet"
+    />
+
+    <!-- Mapbox GL Geocoder CSS -->
+    <link
+      href="https://unpkg.com/@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css"
+      rel="stylesheet"
+    />
   </head>
 
   <body><%= render "shared/navbar" %>
     <%= render "shared/flashes" %>
 
-    <%= yield %>
+    <main>
+      <%= yield %>
+    </main>
+
+    <%= render 'shared/footer' %>
   </body>
 </html>

@@ -12,7 +12,15 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root to: "pages#home"
+  # root to: "journeys#index"
+
+  authenticated :user do
+    root to: "journeys#index", as: :authenticated_root
+  end
+
+  unauthenticated do
+    root to: "devise/sessions#new", as: :unauthenticated_root
+  end
 
   resources :journeys, except: [:show, :edit, :update, :destroy]
   resources :journeys do
