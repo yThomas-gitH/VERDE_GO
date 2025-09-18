@@ -19,7 +19,9 @@ Rails.application.routes.draw do
   end
 
   unauthenticated do
-    root to: "devise/sessions#new", as: :unauthenticated_root
+    devise_scope :user do
+      root to: "devise/sessions#new", as: :unauthenticated_root
+    end
   end
 
   resources :journeys, except: [:show, :edit, :update, :destroy]

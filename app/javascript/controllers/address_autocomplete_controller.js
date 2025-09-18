@@ -17,6 +17,17 @@ export default class extends Controller {
     // Attach geocoder to this element
     this.geocoder.addTo(this.element)
     console.log("MapboxGeocoder connected")
+
+    this.geocoder.on("result", event => this.#setInputValue(event))
+    this.geocoder.on("clear", () => this.#clearInputValue())
+  }
+
+  #setInputValue(event) {
+    this.addressTarget.value = event.result["place_name"]
+  }
+
+  #clearInputValue() {
+    this.addressTarget.value = ""
   }
 
   disconnect() {
