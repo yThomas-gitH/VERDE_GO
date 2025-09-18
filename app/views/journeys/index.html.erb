@@ -38,16 +38,20 @@
 
     </div>
     
-    <div>
-      <h3>Past journeys</h3>
-      <% @journeys.each do |journey| %>
-        <p>
-          <%= journey.origin_address %><br>
-          → <%= journey.destination_address %>
-          |
-          <%= link_to "View Routes", journey_routes_path(journey) %>
-        </p>
-      <% end %>
+    <div class="search-card" data-controller="past-journeys">
+
+      <h3 class="past-journeys-title" data-action="click->past-journeys#toggle" data-past-journeys-target="title">Want to see your past journeys?</h3>
+
+      <div data-past-journeys-target="list" class="past-journeys-list">
+        <% @journeys.each do |journey| %>
+          <p>
+            <%= journey.origin_address %><br>
+            → <%= journey.destination_address %>
+            |
+            <%= link_to "View Routes", journey_routes_path(journey) %>
+          </p>
+        <% end %>
+      </div>
     </div>
   </div>
 

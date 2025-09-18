@@ -22,3 +22,21 @@
 .search-form-fields .search-submit {
   margin-left: auto; /* Push button to the right */
 }
+
+.past-journey-title {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.past-journeys-list {
+  max-height: 0;          /* collapse */
+  overflow: hidden;       /* hide content */
+  opacity: 0;             /* invisible */
+  transition: max-height 0.8s ease, opacity 0.8s ease; /* smooth animation */
+}
+
+/* Shown state */
+.past-journeys-list.show {
+  max-height: 500px;      /* large enough to fit content */
+  opacity: 1;
+}

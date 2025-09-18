@@ -6,3 +6,4 @@
 //= link controllers/hello_controller.js
 //= link controllers/index.js
 //= link controllers/dropdown_controller.js
+//= link controllers/past_journeys_controller.js
