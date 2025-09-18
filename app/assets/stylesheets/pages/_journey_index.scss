@@ -3,6 +3,21 @@
   flex-direction: row;
   justify-content: space-between;
   padding: 3%;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  max-width: 100%;
+  gap: 1rem;
+}
+
+.flex-row > div {
+  flex: 1 1 400px; /* grow/shrink but prefer 400px min width */
+  max-width: 100%; /* never overflow parent */
+}
+
+.flex-row img {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 .search-card {
