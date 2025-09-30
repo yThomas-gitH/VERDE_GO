@@ -6,7 +6,7 @@ pin "@hotwired/stimulus-loading", to: "stimulus-loading.js", preload: true
 pin_all_from "app/javascript/controllers", under: "controllers"
 
 # Mapbox GL + Geocoder
-pin "mapbox-gl", to: "https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js", preload: true
+pin "mapbox-gl", to: "https://ga.jspm.io/npm:mapbox-gl@3.1.2/dist/mapbox-gl.js"
 pin "mapbox-gl-geocoder", to: "https://unpkg.com/@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.min.js", preload: true
 
 # Node.js polyfills (if needed by mapbox-gl)

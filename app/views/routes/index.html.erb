@@ -1,13 +1,22 @@
-<h1>Routes</h1>
-<% @routes.each do |route| %>
-  <p>
-    journey: <%= route.journey %>,
-    transport_mode: <%= route.transport_mode.name %>,
-    total_duration_minutes: <%= route.total_duration_minutes %>,
-    total_distance_km: <%= route.total_distance_km %>,
-    eco_score: <%= route.eco_score %>,
-    map_polyline: <%= route.map_polyline %>
-  
-  <%= link_to "View Route", journey_route_path(route.journey, route) %>
-  </p>
-<% end %>
+<div class="flex-row">
+  <div>
+    <h1>Routes</h1>
+    <% @routes.each do |route| %>
+      <p>
+        Eco Score: <%= route.eco_score %>
+      </p>
+      <p>
+        Transport mode: <%= route.transport_mode.name %>
+      </p>
+      <p>
+        Total duration: <%= route.total_duration_minutes %>min
+      </p>
+      <p>
+        Total distance: <%= route.total_distance_km %>km
+      </p>
+      <p>
+        <%= link_to "View Route", journey_route_path(route.journey, route) %>
+      </p>
+    <% end %>
+  </div>
+</div>

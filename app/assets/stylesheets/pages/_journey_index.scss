@@ -28,6 +28,20 @@
   margin-bottom: 2%;
 }
 
+.past-card {
+  box-shadow: 3px 7px 10px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  transition: 250ms ease-out;
+}
+
+.past-card:hover {
+  box-shadow: 3px 7px 10px rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+}
+
 .search-form-fields {
   display: flex;
   align-items: flex-end; /* Align button with bottom of inputs */
@@ -52,6 +66,6 @@
 
 /* Shown state */
 .past-journeys-list.show {
-  max-height: 500px;      /* large enough to fit content */
+  max-height: 700px;      /* large enough to fit content */
   opacity: 1;
 }

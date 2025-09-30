@@ -44,12 +44,17 @@
 
       <div data-past-journeys-target="list" class="past-journeys-list">
         <% @journeys.each do |journey| %>
-          <p>
-            <%= journey.origin_address %><br>
-            → <%= journey.destination_address %>
-            |
-            <%= link_to "View Routes", journey_routes_path(journey) %>
-          </p>
+          <%= link_to journey_routes_path(journey), style: "text-decoration: none; color: inherit;" do %>
+            <div class="past-card">
+              <p>
+                <%= journey.origin_address %><br>
+              </p>
+              <hr>
+              <p>
+                <i class="fa-solid fa-circle-right"></i> <%= journey.destination_address %>
+              </p>
+            </div>
+          <% end %>
         <% end %>
       </div>
     </div>
