@@ -1,22 +1,42 @@
-<div class="flex-row">
-  <div>
+<div class="routes-container" data-controller="mapbox-routes">
+  <!-- Liste des routes à gauche -->
+  <div class="routes-sidebar">
     <h1>Routes</h1>
-    <% @routes.each do |route| %>
-      <p>
-        Eco Score: <%= route.eco_score %>
-      </p>
-      <p>
-        Transport mode: <%= route.transport_mode.name %>
-      </p>
-      <p>
-        Total duration: <%= route.total_duration_minutes %>min
-      </p>
-      <p>
-        Total distance: <%= route.total_distance_km %>km
-      </p>
-      <p>
-        <%= link_to "View Route", journey_route_path(route.journey, route) %>
-      </p>
+    <% @routes.each_with_index do |route, index| %>
+      <div class="route-item" 
+           data-mapbox-routes-target="routeItem"
+           data-polyline="<%= route.map_polyline %>"
+           data-origin="<%= {lat: route.journey.origin_lat, lng: route.journey.origin_lng}.to_json %>"
+           data-destination="<%= {lat: route.journey.destination_lat, lng: route.journey.destination_lng}.to_json %>"
+           data-index="<%= index %>"
+           data-action="click->mapbox-routes#selectRoute">
+        <div class="route-header">
+          <span class="route-title">Route <%= index + 1 %></span>
+          <span class="eco-badge">
+            Eco Score: <%= route.eco_score %>
+          </span>
+        </div>
+        <p class="route-detail">
+          <strong>Mode:</strong> <%= route.transport_mode.name %>
+        </p>
+        <p class="route-detail">
+          <strong>Durée:</strong> <%= route.total_duration_minutes %> min
+        </p>
+        <p class="route-detail">
+          <strong>Distance:</strong> <%= route.total_distance_km %> km
+        </p>
+        <p>
+          <%= link_to "Voir détails", journey_route_path(route.journey, route), class: "route-link" %>
+        </p>
+      </div>
     <% end %>
+  </div>
+
+  <!-- Carte Mapbox à droite -->
+  <div class="map-container">
+    <div data-mapbox-routes-target="map" 
+         data-mapbox-token="<%= ENV['MAPBOX_ACCESS_TOKEN'] %>"
+         class="map">
+    </div>
   </div>
 </div>

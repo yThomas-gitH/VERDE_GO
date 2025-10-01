@@ -7,3 +7,4 @@
 //= link controllers/index.js
 //= link controllers/dropdown_controller.js
 //= link controllers/past_journeys_controller.js
+//= link controllers/mapbox_routes_controller.js
