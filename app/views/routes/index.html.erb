@@ -1,42 +1,40 @@
-<div class="routes-container" data-controller="mapbox-routes">
-  <!-- Liste des routes à gauche -->
-  <div class="routes-sidebar">
-    <h1>Routes</h1>
-    <% @routes.each_with_index do |route, index| %>
-      <div class="route-item" 
-           data-mapbox-routes-target="routeItem"
-           data-polyline="<%= route.map_polyline %>"
-           data-origin="<%= {lat: route.journey.origin_lat, lng: route.journey.origin_lng}.to_json %>"
-           data-destination="<%= {lat: route.journey.destination_lat, lng: route.journey.destination_lng}.to_json %>"
-           data-index="<%= index %>"
-           data-action="click->mapbox-routes#selectRoute">
-        <div class="route-header">
-          <span class="route-title">Route <%= index + 1 %></span>
-          <span class="eco-badge">
-            Eco Score: <%= route.eco_score %>
-          </span>
-        </div>
-        <p class="route-detail">
-          <strong>Mode:</strong> <%= route.transport_mode.name %>
-        </p>
-        <p class="route-detail">
-          <strong>Durée:</strong> <%= route.total_duration_minutes %> min
-        </p>
-        <p class="route-detail">
-          <strong>Distance:</strong> <%= route.total_distance_km %> km
-        </p>
-        <p>
-          <%= link_to "Voir détails", journey_route_path(route.journey, route), class: "route-link" %>
-        </p>
+<div data-controller="route-loader mapbox-routes" 
+     data-route-loader-journey-id-value="<%= @journey.id %>"
+     data-route-loader-poll-interval-value="2000">
+  
+  <!-- Loading Screen -->
+  <div data-route-loader-target="loading" class="loading-container">
+    <div class="loading-content">
+      <div class="spinner"></div>
+      <h2>Calcul de vos routes en cours...</h2>
+      <p>Nous analysons les meilleures options de transport pour votre trajet</p>
+      <div class="progress-bar">
+        <div class="progress-fill" data-route-loader-target="progressBar"></div>
       </div>
-    <% end %>
+      <p class="progress-text" data-route-loader-target="progressText">0%</p>
+    </div>
   </div>
 
-  <!-- Carte Mapbox à droite -->
-  <div class="map-container">
-    <div data-mapbox-routes-target="map" 
-         data-mapbox-token="<%= ENV['MAPBOX_ACCESS_TOKEN'] %>"
-         class="map">
+  <!-- Routes Content (hidden initially) -->
+  <div data-route-loader-target="content" class="routes-container" style="display: none;">
+    <!-- Liste des routes à gauche -->
+    <div class="routes-sidebar">
+      <h1>Routes</h1>
+      <div data-route-loader-target="routesList">
+        <% if @routes.present? %>
+          <% @routes.each_with_index do |route, index| %>
+            <%= render partial: 'route_item', locals: { route: route, index: index } %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Carte Mapbox à droite -->
+    <div class="map-container">
+      <div data-mapbox-routes-target="map" 
+           data-mapbox-token="<%= ENV['MAPBOX_ACCESS_TOKEN'] %>"
+           class="map">
+      </div>
     </div>
   </div>
 </div>

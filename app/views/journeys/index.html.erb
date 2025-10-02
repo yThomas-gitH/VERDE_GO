@@ -1,57 +1,71 @@
 <div class="flex-row">
-
   <div>
     <h1>Ready to start a new eco Journey?</h1>
     <div class="search-card">
       <h4>Plan your trip</h4>
+      
+      <% if @journey.errors.any? %>
+        <div class="alert alert-danger">
+          <h5><%= pluralize(@journey.errors.count, "error") %> prohibited this journey from being saved:</h5>
+          <ul>
+            <% @journey.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
       <div>
-        <%= simple_form_for [@journey], html: { class: "search-form" } do |f| %>
-
+        <%= simple_form_for @journey, html: { class: "search-form", data: { controller: "journey-form" } } do |f| %>
           <div class="search-form-fields">
-
             <!-- ORIGIN -->
-            <div
-              data-controller="address-autocomplete"
-              data-address-autocomplete-api-key-value="<%= ENV['MAPBOX_ACCESS_TOKEN'] %>"
-            >
-              <%= f.input :origin_address, label: 'From',
-              input_html: {data: {address_autocomplete_target: "address"}, class: "d-none"} %>
+            <div data-controller="address-autocomplete" 
+                 data-address-autocomplete-api-key-value="<%= ENV['MAPBOX_ACCESS_TOKEN'] %>">
+              <%= f.input :origin_address, 
+                  label: 'From', 
+                  input_html: { 
+                    data: { address_autocomplete_target: "address" }, 
+                    class: "d-none",
+                    required: true 
+                  } %>
             </div>
 
             <!-- DESTINATION -->
-            <div
-              data-controller="address-autocomplete"
-              data-address-autocomplete-api-key-value="<%= ENV['MAPBOX_ACCESS_TOKEN'] %>"
-            >
-              <%= f.input :destination_address, label: 'To',
-              input_html: {data: {address_autocomplete_target: "address"}, class: "d-none"} %>
-              </div>
+            <div data-controller="address-autocomplete" 
+                 data-address-autocomplete-api-key-value="<%= ENV['MAPBOX_ACCESS_TOKEN'] %>">
+              <%= f.input :destination_address, 
+                  label: 'To', 
+                  input_html: { 
+                    data: { address_autocomplete_target: "address" }, 
+                    class: "d-none",
+                    required: true 
+                  } %>
+            </div>
 
             <!-- SUBMIT BUTTON -->
             <div class="search-submit">
-              <%= f.submit "Start Journey"%>
+              <%= f.submit "Start Journey", data: { action: "click->journey-form#submit" } %>
             </div>
           </div>
         <% end %>
       </div>
-
     </div>
-    
+
     <div class="search-card" data-controller="past-journeys">
-
-      <h3 class="past-journeys-title" data-action="click->past-journeys#toggle" data-past-journeys-target="title">Want to see your past journeys?</h3>
-
+      <h3 class="past-journeys-title" 
+          data-action="click->past-journeys#toggle" 
+          data-past-journeys-target="title">
+        Want to see your past journeys?
+      </h3>
       <div data-past-journeys-target="list" class="past-journeys-list">
         <% @journeys.each do |journey| %>
           <%= link_to journey_routes_path(journey), style: "text-decoration: none; color: inherit;" do %>
             <div class="past-card">
-              <p>
-                <%= journey.origin_address %><br>
-              </p>
+              <p><%= journey.origin_address %></p>
               <hr>
               <p>
-                <i class="fa-solid fa-circle-right"></i> <%= journey.destination_address %>
+                <i class="fa-solid fa-circle-right"></i>
+                <%= journey.destination_address %>
               </p>
             </div>
           <% end %>
@@ -59,8 +73,8 @@
       </div>
     </div>
   </div>
-
+  
   <div>
-   <%= image_tag "verdego_logo.png", alt: "VerdeGo Logo" %>
+    <%= image_tag "verdego_logo.png", alt: "VerdeGo Logo" %>
   </div>
 </div>

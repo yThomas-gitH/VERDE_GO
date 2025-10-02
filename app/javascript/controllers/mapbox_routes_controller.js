@@ -6,7 +6,24 @@ export default class extends Controller {
   
   connect() {
     this.currentRouteItem = null
-    this.initializeMap()
+    this.mapInitialized = false
+    
+    // Écouter l'événement de chargement des routes
+    this.element.addEventListener('route-loader:routes-loaded', () => {
+      if (!this.mapInitialized) {
+        this.initializeMap()
+      } else {
+        // Si la carte existe déjà, juste afficher la première route
+        if (this.routeItemTargets.length > 0) {
+          this.displayRouteByIndex(0)
+        }
+      }
+    })
+    
+    // Si des routes existent déjà au chargement, initialiser la carte
+    if (this.routeItemTargets.length > 0) {
+      this.initializeMap()
+    }
   }
 
   disconnect() {

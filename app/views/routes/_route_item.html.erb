@@ -1,0 +1,26 @@
+<div class="route-item" 
+     data-mapbox-routes-target="routeItem"
+     data-polyline="<%= route.map_polyline %>"
+     data-origin="<%= {lat: route.journey.origin_lat, lng: route.journey.origin_lng}.to_json %>"
+     data-destination="<%= {lat: route.journey.destination_lat, lng: route.journey.destination_lng}.to_json %>"
+     data-index="<%= index %>"
+     data-action="click->mapbox-routes#selectRoute">
+  <div class="route-header">
+    <span class="route-title">Route <%= index + 1 %></span>
+    <span class="eco-badge">
+      Eco Score: <%= route.eco_score %>
+    </span>
+  </div>
+  <p class="route-detail">
+    <strong>Mode:</strong> <%= route.transport_mode.name %>
+  </p>
+  <p class="route-detail">
+    <strong>Durée:</strong> <%= route.total_duration_minutes %> min
+  </p>
+  <p class="route-detail">
+    <strong>Distance:</strong> <%= route.total_distance_km %> km
+  </p>
+  <p>
+    <%= link_to "Voir détails", journey_route_path(route.journey, route), class: "route-link" %>
+  </p>
+</div>

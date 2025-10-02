@@ -19,7 +19,14 @@ class RoutesController < ApplicationController
     
     respond_to do |format|
       format.html
-      format.json { render json: @routes.as_json(include: [:carbon_calculation, :transport_mode]) }
+      format.json do
+        render json: {
+          routes: @routes.as_json(
+            include: [:carbon_calculation, :transport_mode],
+            methods: [:carbon_per_km]
+          )
+        }
+      end
     end
   end
   

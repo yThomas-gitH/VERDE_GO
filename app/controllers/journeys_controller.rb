@@ -37,54 +37,29 @@ class JourneysController < ApplicationController
     @journey = Journey.new(journey_params)
     @journey.user = current_user
 
-    # Geocode the addresses before saving
+    # Log pour debug
+    Rails.logger.info "Journey params: #{journey_params.inspect}"
+    
+    # Vérifier que les adresses sont présentes
+    if @journey.origin_address.blank? || @journey.destination_address.blank?
+      @journey.errors.add(:base, 'Veuillez sélectionner une adresse de départ et d\'arrivée')
+      @journeys = current_user.journeys.recent.includes(routes: [:carbon_calculation, :transport_mode])
+      return render :index, status: :unprocessable_entity
+    end
+
+    # Geocode les adresses
     if geocode_addresses
       if @journey.save
-        respond_to do |format|
-          format.html { 
-            redirect_to journey_routes_path(@journey), 
-            notice: 'Journey created! We\'re calculating the best routes for you...' 
-          }
-          format.json { 
-            render json: { 
-              journey: @journey.as_json(methods: [:distance_km]),
-              message: 'Journey created successfully. Routes are being calculated.',
-              redirect_url: journey_routes_path(@journey)
-            }, status: :created 
-          }
-        end
-
+        redirect_to journey_routes_path(@journey), notice: 'Journey created! We\'re calculating the best routes for you...'
         RouteCalculationJob.perform_later(@journey.id)
-
       else
-        respond_to do |format|
-          format.html { 
-            @journeys = current_user.journeys.recent.includes(routes: [:carbon_calculation, :transport_mode])
-            render :index, status: :unprocessable_entity 
-          }
-          format.json { 
-            render json: { 
-              errors: @journey.errors.full_messages,
-              journey: @journey
-            }, status: :unprocessable_entity 
-          }
-        end
+        @journeys = current_user.journeys.recent.includes(routes: [:carbon_calculation, :transport_mode])
+        render :index, status: :unprocessable_entity
       end
     else
-      # Geocoding failed
       @journey.errors.add(:base, 'Could not find the specified addresses. Please check and try again.')
-      respond_to do |format|
-        format.html { 
-          @journeys = current_user.journeys.recent.includes(routes: [:carbon_calculation, :transport_mode])
-          render :index, status: :unprocessable_entity 
-        }
-        format.json { 
-          render json: { 
-            errors: @journey.errors.full_messages,
-            journey: @journey
-          }, status: :unprocessable_entity 
-        }
-      end
+      @journeys = current_user.journeys.recent.includes(routes: [:carbon_calculation, :transport_mode])
+      render :index, status: :unprocessable_entity
     end
   end
   

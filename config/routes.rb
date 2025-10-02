@@ -36,6 +36,11 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  resources :journeys do
+    get 'route_status', on: :member
+    resources :routes
+  end
   
   mount Sidekiq::Web => "/sidekiq"
 end
